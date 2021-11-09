@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 const UserModel = require('../schema/usersSchema')
 
@@ -8,10 +9,12 @@ const UserModel = require('../schema/usersSchema')
 router.get('/', async (req, res) => {
   try {
     const usersList = await UserModel.find()
-    res.status(200).send(usersList)
+    const result = { data: usersList, response: {} }
+    res.status(200).send(result)
 
   } catch (error) {
-    res.status(500).send(error.message);
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
 
   }
 })
@@ -26,23 +29,26 @@ router.get('/:userId', async (req, res) => {
 
     if (user) {
       // one user found
-      res.status(200).send(user)
+      const result = { data: [user], response: {} }
+      res.status(200).send(result)
 
     } else {
       // no user found
-      res.status(404).send({ action: false, message: 'user not found' })
+      const result = { data: [], response: { message: "user not found" } }
+      res.status(404).send(result)
 
     }
 
   } catch (error) {
-    res.status(500).send(error.message)
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
 
   }
 })
 
 
 // create new user data
-router.post('/create', async (req, res) => {
+router.post('/signup', async (req, res) => {
   const userData = req.body;
 
   try {
@@ -51,7 +57,8 @@ router.post('/create', async (req, res) => {
     if (isUserFound) {
       // email already taken
       // so con't create new account
-      res.status(400).send({ action: false, message: 'email already taken' })
+      const result = { data: [], response: { message: 'email is already registered' } }
+      res.status(400).send(result)
 
     } else {
       // email not taken --> creating
@@ -62,11 +69,13 @@ router.post('/create', async (req, res) => {
       })
 
       const createdUser = await newUser.save()
-      res.status(201).send(createdUser)
+      const result = { data: [createdUser], response: {} }
+      res.status(201).send(result)
 
     }
   } catch (error) {
-    res.status(500).send(error.message)
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
   }
 })
 
@@ -81,17 +90,20 @@ router.delete('/delete', async (req, res) => {
     if (isUserFound) {
       // user found --> deleting
       await UserModel.findByIdAndDelete(id)
-      res.status(200).send({ action: true, message: "user has been deleted successfully" })
+      const result = { data: [], response: { message: 'user has been deleted successfully' } }
+      res.status(200).send(result)
 
     } else {
       // user not found
       // can't delete user
-      res.status(404).send({ action: false, message: 'user not found to delete' })
+      const result = { data: [], response: { message: 'user not found to delete' } }
+      res.status(404).send(result)
 
     }
 
   } catch (error) {
-    res.status(500).send(error.message)
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
 
   }
 })
@@ -113,19 +125,56 @@ router.put('/update', async (req, res) => {
         profileImg: userData.profileImg,
         password: userData.password,
       }, { new: true });
-
-      res.status(200).send(updateduser)
+      const result = { data: [updateduser], response: {} }
+      res.status(200).send(result)
 
     } else {
       // user not found
       // can't update user
-      res.status(404).send({ action: false, message: 'user not found to update' })
+      const result = { data: [], response: { message: 'user not found to update' } }
+      res.status(404).send(result)
 
     }
 
   } catch (error) {
-    res.status(500).send(error.message)
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
 
+  }
+})
+
+
+// login user 
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await UserModel.findOne({ email })
+
+    if (user) {
+      // user found --> check password
+      const auth = await bcrypt.compare(password, user.password)
+
+      if (auth) {
+        const result = { data: [user], response: {} }
+        res.status(200).send(result)
+
+      } else {
+        const result = { data: [], response: { message: "invalid credentials" } }
+        res.status(400).send(result)
+
+      }
+
+    } else {
+      // user not found --> can't login
+      const result = { data: [], response: { message: 'invalid credentials' } }
+      res.status(404).send(result)
+
+    }
+
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
   }
 })
 
