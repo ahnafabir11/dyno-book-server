@@ -18,3 +18,7 @@ mongoose.connect(process.env.DATABASE_URL)
 // USER ROUTE
 const userRouter = require('./routes/users')
 app.use('/api/users', userRouter)
+
+// VARSITY ROUTE
+const varsityRouter = require('./routes/varsity')
+app.use('/api/varsities', varsityRouter)
