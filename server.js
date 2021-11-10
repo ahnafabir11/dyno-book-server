@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }))
 // ROUTES
 app.get('/', async (req, res) => {
   try {
-    res.status(200).send("hello!")
+    res.status(200).send("It worked!")
 
   } catch (error) {
     res.status(400).send(error)
