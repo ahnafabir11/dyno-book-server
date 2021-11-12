@@ -4,12 +4,13 @@ const varsitySchema = new Schema({
   name: {
     type: String,
     required: true,
+    lowercase: true,
     trim: true,
   },
   shortName: {
     type: String,
     required: true,
-    uppercase: true,
+    lowercase: true,
     trim: true,
   },
   accYear: [{
@@ -17,8 +18,8 @@ const varsitySchema = new Schema({
     end: { type: String, required: true }
   }],
   units: [{
-    code: { type: String, required: true },
-    group: { type: String, required: true }
+    code: { type: String, required: true, lowercase: true },
+    group: { type: String, required: true, lowercase: true }
   }]
 })
 

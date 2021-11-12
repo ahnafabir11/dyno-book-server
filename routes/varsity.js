@@ -305,7 +305,7 @@ router.put('/remove/unit', async (req, res) => {
         }, { new: true }
       )
 
-      const result = { data: [updatedVarsity], response: { message: "acc year removed" } }
+      const result = { data: [updatedVarsity], response: { message: "unit deleted successfully" } }
       res.status(200).send(result)
 
 
