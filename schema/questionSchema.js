@@ -47,7 +47,7 @@ const questionSchema = new Schema({
       trim: true,
     },
   }],
-  answer: [{
+  answer: {
     ban: {
       type: String,
       required: true,
@@ -58,7 +58,7 @@ const questionSchema = new Schema({
       lowercase: true,
       trim: true,
     }
-  }],
+  },
   explanation: {
     ban: {
       type: String,

@@ -18,6 +18,23 @@ router.get('/', async (req, res) => {
 })
 
 
+//get questions by varsity name 
+router.get('/for/name', async (req, res) => {
+  const questionInfo = req.body;
+
+  try {
+    const questions = await QuestionModel.find(questionInfo)
+    const result = { data: questions, response: {} }
+    res.status(200).send(result)
+
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
+  }
+
+})
+
+
 // get a specific question
 router.get('/:id', async (req, res) => {
   const id = req.params.id;
@@ -79,7 +96,7 @@ router.delete('/remove', async (req, res) => {
 
     if (question) {
       await QuestionModel.findByIdAndDelete(id)
-      const result = {data: [], response: { message: "question deleted successfully" } }
+      const result = { data: [], response: { message: "question deleted successfully" } }
       res.status(200).send(result)
 
     } else {
