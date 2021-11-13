@@ -27,10 +27,10 @@ router.get('/:id', async (req, res) => {
     const question = await QuestionModel.findById(id)
 
     if (question) {
-      const result = { data: [question], response: {}}
+      const result = { data: [question], response: {} }
       res.status(200).send(result)
     } else {
-      const result = { data: [], response: { message: 'question not found'}}
+      const result = { data: [], response: { message: 'question not found' } }
       res.status(404).send(result)
     }
 
@@ -67,5 +67,31 @@ router.post('/add', async (req, res) => {
     res.status(500).send(result)
   }
 })
+
+
+// delete one question
+router.delete('/remove', async (req, res) => {
+  const id = req.body.id;
+
+  try {
+    // check if question exist
+    const question = await QuestionModel.findById(id)
+
+    if (question) {
+      await QuestionModel.findByIdAndDelete(id)
+      const result = {data: [], response: { message: "question deleted successfully" } }
+      res.status(200).send(result)
+
+    } else {
+      const result = { data: [], response: { message: "question not found" } }
+      res.status(404).send(result)
+    }
+
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
+  }
+})
+
 
 module.exports = router;
