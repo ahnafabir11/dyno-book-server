@@ -3,6 +3,21 @@ const router = express.Router();
 
 const QuestionModel = require('../schema/questionSchema')
 
+
+// get all questions 
+router.get('/', async (req, res) => {
+  try {
+    const questions = await QuestionModel.find()
+    const result = { data: questions, response: {} }
+    res.status(200).send(result)
+
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
+  }
+})
+
+
 // add new question
 router.post('/add', async (req, res) => {
   const questionInfo = req.body;
