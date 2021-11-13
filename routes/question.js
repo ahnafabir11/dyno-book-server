@@ -18,6 +18,29 @@ router.get('/', async (req, res) => {
 })
 
 
+// get a specific question
+router.get('/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // check if quesiton exist
+    const question = await QuestionModel.findById(id)
+
+    if (question) {
+      const result = { data: [question], response: {}}
+      res.status(200).send(result)
+    } else {
+      const result = { data: [], response: { message: 'question not found'}}
+      res.status(404).send(result)
+    }
+
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
+  }
+})
+
+
 // add new question
 router.post('/add', async (req, res) => {
   const questionInfo = req.body;
