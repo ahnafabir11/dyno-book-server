@@ -18,8 +18,8 @@ router.get('/', async (req, res) => {
 })
 
 
-//get questions by varsity name 
-router.get('/for/name', async (req, res) => {
+//get questions by filtering varsity info
+router.get('/filter', async (req, res) => {
   const questionInfo = req.body;
 
   try {
