@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 
 
 //get questions by filtering varsity info
-router.get('/filter', async (req, res) => {
+router.post('/filter', async (req, res) => {
   const questionInfo = req.body;
 
   try {
