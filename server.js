@@ -22,3 +22,7 @@ app.use('/api/users', userRouter)
 // VARSITY ROUTE
 const varsityRouter = require('./routes/varsity')
 app.use('/api/varsities', varsityRouter)
+
+// QUESTION ROUTE
+const questionRouter = require('./routes/question')
+app.use('/api/questions', questionRouter)
