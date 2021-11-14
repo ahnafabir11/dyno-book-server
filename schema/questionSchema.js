@@ -18,6 +18,10 @@ const questionSchema = new Schema({
     lowercase: true,
     trim: true,
   },
+  questionPassage: {
+    type: String,
+    trim: true,
+  },
   question: {
     ban: {
       type: String,

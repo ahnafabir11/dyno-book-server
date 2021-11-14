@@ -67,6 +67,7 @@ router.post('/add', async (req, res) => {
       varsityName: questionInfo.varsityName,
       accYear: questionInfo.accYear,
       unit: questionInfo.unit,
+      questionPassage: questionInfo.questionPassage,
       question: questionInfo.question,
       options: questionInfo.options,
       answer: questionInfo.answer,
