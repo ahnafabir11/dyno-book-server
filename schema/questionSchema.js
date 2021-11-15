@@ -23,56 +23,23 @@ const questionSchema = new Schema({
     trim: true,
   },
   question: {
-    ban: {
-      type: String,
-      required: true,
-      tirm: true,
-    },
-    eng: {
-      type: String,
-      lowercase: true,
-      tirm: true,
-    },
-    bng: {
-      type: String,
-      lowercase: true,
-      tirm: true,
-    },
+    type: String,
+    required: true,
+    tirm: true,
   },
   options: [{
-    ban: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    eng: {
-      type: String,
-      lowercase: true,
-      trim: true,
-    },
+    type: String,
+    required: true,
+    trim: true
   }],
   answer: {
-    ban: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    eng: {
-      type: String,
-      lowercase: true,
-      trim: true,
-    }
+    type: String,
+    required: true,
+    trim: true,
   },
   explanation: {
-    ban: {
-      type: String,
-      trim: true,
-    },
-    eng: {
-      type: String,
-      lowercase: true,
-      trim: true,
-    }
+    type: String,
+    trim: true,
   },
   category: [{
     value: {
