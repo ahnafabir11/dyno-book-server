@@ -92,7 +92,6 @@ router.post('/add', async (req, res) => {
         name: varsityInfo.name,
         shortName: varsityInfo.shortName,
         accYear: varsityInfo.accYear,
-        units: varsityInfo.units
       })
 
       const createdVarsity = await newVarsity.save()
@@ -188,7 +187,8 @@ router.put('/add/accYear', async (req, res) => {
           $push: {
             accYear: {
               start: accYearInfo.start,
-              end: accYearInfo.end
+              end: accYearInfo.end,
+              units: [],
             }
           }
         }, { new: true }
@@ -257,11 +257,11 @@ router.put('/add/unit', async (req, res) => {
 
     if (isVarsityFound) {
       // varsity found
-      const updatedVarsity = await VarsityModel.findByIdAndUpdate(
-        { _id: unitInfo.varsityId },
+      const updatedVarsity = await VarsityModel.updateOne(
+        { _id: unitInfo.varsityId, "accYear._id": unitInfo.accId },
         {
           $push: {
-            units: {
+            "accYear.$.units": {
               code: unitInfo.code,
               group: unitInfo.group
             }
@@ -269,11 +269,13 @@ router.put('/add/unit', async (req, res) => {
         }, { new: true }
       )
 
-      const result = { data: [updatedVarsity], response: { message: "new unit added" } }
+      if (updatedVarsity.modifiedCount === 0) return
+      const updatedVarsityInfo = await VarsityModel.findById({ _id: unitInfo.varsityId })
+      const result = { data: [updatedVarsityInfo], response: { message: "new unit added" } }
       res.status(200).send(result)
 
     } else {
-      const result = { data: [], response: { message: "varsity not found" } }
+      const result = { data: [], response: { message: "academic year not found" } }
       res.status(404).send(result)
     }
 
@@ -296,16 +298,18 @@ router.put('/remove/unit', async (req, res) => {
 
     if (isVarsityFound) {
       // varsity found
-      const updatedVarsity = await VarsityModel.findByIdAndUpdate(
-        { _id: unitInfo.varsityId },
+      const updatedVarsity = await VarsityModel.updateOne(
+        { _id: unitInfo.varsityId, "accYear._id": unitInfo.accId },
         {
           $pull: {
-            units: { _id: unitInfo.unitId }
+            "accYear.$.units": { _id: unitInfo.unitId }
           }
         }, { new: true }
       )
 
-      const result = { data: [updatedVarsity], response: { message: "unit deleted successfully" } }
+      if (updatedVarsity.modifiedCount === 0) return
+      const updatedVarsityInfo = await VarsityModel.findById({ _id: unitInfo.varsityId })
+      const result = { data: [updatedVarsityInfo], response: { message: "unit deleted" } }
       res.status(200).send(result)
 
 

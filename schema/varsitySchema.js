@@ -15,11 +15,11 @@ const varsitySchema = new Schema({
   },
   accYear: [{
     start: { type: String, required: true },
-    end: { type: String, required: true }
-  }],
-  units: [{
-    code: { type: String, required: true, lowercase: true },
-    group: { type: String, required: true, lowercase: true }
+    end: { type: String, required: true },
+    units: [{
+      code: { type: String, required: true, lowercase: true },
+      group: { type: String, required: true, lowercase: true }
+    }]
   }]
 })
 
