@@ -112,4 +112,34 @@ router.delete('/remove', async (req, res) => {
 })
 
 
+// update question
+router.put('/update', async (req, res) => {
+  const { id, questionPassage, question, options, answer, explanation, category } = req.body;
+  
+  try {
+    // check is question exist
+    const isquestion = await QuestionModel.findById(id)
+
+    if (isquestion) {
+      // question found
+      const updatedQuestion = await QuestionModel.findByIdAndUpdate(
+        id,
+        { questionPassage, question, options, answer, explanation, category },
+        { new: true, runValidators: true },
+      )
+      
+      const result = { data: [updatedQuestion], response: { message: "question updated" } }
+      res.status(200).send(result)
+    } else {
+      // question not found
+      const result = { data: [], response: { message: "question not found" } }
+      res.status(400).send(result)
+    }
+  } catch (error) {
+    const result = { data: [], response: { message: error.message } }
+    res.status(500).send(result)
+  }
+})
+
+
 module.exports = router;
